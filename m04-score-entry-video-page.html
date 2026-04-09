@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Entry: Why It Matters</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:       #1B5E59;
+    --teal-dark:  #0f3835;
+    --teal-light: #e8f5f4;
+    --teal-mid:   #6ab8b3;
+    --slate:      #4a4a4b;
+    --body:       #2d2d2e;
+    --border:     #e8e8e9;
+    --white:      #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f7f9f9;
+    color: var(--body);
+    min-height: 100vh;
+  }
+
+  /* ── SLIDE WRAPPER ─────────────────────────────────────────── */
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+  }
+
+  .slide.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── SLIDE 1 — HERO ────────────────────────────────────────── */
+  .slide-hero {
+    background: var(--teal-dark);
+    color: var(--white);
+    min-height: 100vh;
+    justify-content: flex-end;
+    padding-bottom: 80px;
+  }
+
+  .slide-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(106,184,179,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(27,94,89,0.4) 0%, transparent 60%);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    color: var(--white);
+    line-height: 1.1;
+    position: relative;
+    max-width: 700px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: var(--teal-mid);
+  }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    max-width: 560px;
+    position: relative;
+  }
+
+  .hero-module-tag {
+    position: absolute;
+    top: 48px;
+    right: 80px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── SLIDE 2 — CHALLENGE ───────────────────────────────────── */
+  .slide-challenge { background: var(--white); }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 12px;
+  }
+
+  .slide-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    color: var(--teal-dark);
+    line-height: 1.15;
+    margin-bottom: 32px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .body-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--body);
+  }
+
+  .body-text + .body-text {
+    margin-top: 16px;
+  }
+
+  .stat-block {
+    background: var(--teal-light);
+    border-radius: 16px;
+    padding: 36px 32px;
+    border-left: 4px solid var(--teal);
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 4rem;
+    color: var(--teal-dark);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* ── SLIDE 3 — ITEM TO DO LIST ─────────────────────────────── */
+  .slide-tool { background: var(--teal-light); }
+
+  .tool-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(15,56,53,0.10);
+    margin-top: 32px;
+  }
+
+  .tool-card-header {
+    background: var(--teal-dark);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tool-card-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .tool-badge {
+    background: var(--teal-mid);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .tool-card-body {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+  }
+
+  .tool-image-zone {
+    padding: 28px;
+    border-right: 1px solid var(--border);
+  }
+
+  .tool-image-zone img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: block;
+  }
+
+  .tool-uses {
+    padding: 28px 32px;
+  }
+
+  .tool-uses h3 {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 16px;
+  }
+
+  .use-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    align-items: flex-start;
+  }
+
+  .use-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .use-text strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--teal-dark);
+    margin-bottom: 2px;
+  }
+
+  .use-text span {
+    font-size: 0.88rem;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* ── SLIDE 4 — CALLOUT ─────────────────────────────────────── */
+  .slide-callout {
+    background: var(--teal-dark);
+    color: var(--white);
+    min-height: 60vh;
+  }
+
+  .callout-inner {
+    max-width: 680px;
+  }
+
+  .callout-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.3;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .callout-quote em {
+    font-style: normal;
+    color: var(--teal-mid);
+  }
+
+  .callout-action {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+  }
+
+  /* ── SLIDE 5 — NEXT UP ─────────────────────────────────────── */
+  .slide-next { background: var(--white); }
+
+  .teacher-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+  }
+
+  .teacher-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .teacher-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(15,56,53,0.12);
+  }
+
+  .teacher-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .teacher-card-info {
+    padding: 16px 18px;
+    background: var(--white);
+  }
+
+  .teacher-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--teal-dark);
+    margin-bottom: 4px;
+  }
+
+  .teacher-approach {
+    font-size: 0.85rem;
+    color: var(--slate);
+  }
+
+  .teacher-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--teal-light);
+    color: var(--teal);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* ── NAV DOTS ──────────────────────────────────────────────── */
+  .nav-dots {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    border: none;
+  }
+
+  .nav-dot.active {
+    background: var(--teal);
+    transform: scale(1.4);
+  }
+
+  /* ── PROGRESS BAR ──────────────────────────────────────────── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--teal-mid);
+    transition: width 0.3s ease;
+    z-index: 200;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav class="nav-dots" aria-label="Page sections">
+  <button class="nav-dot active" onclick="scrollToSlide(0)" aria-label="Introduction"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)" aria-label="The challenge"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)" aria-label="Item To Do List"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)" aria-label="Key idea"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)" aria-label="Meet the teachers"></button>
+</nav>
+
+<!-- SLIDE 1: HERO -->
+<section class="slide slide-hero" id="slide-0">
+  <span class="hero-module-tag">Module 4 · Score Entry</span>
+  <p class="hero-eyebrow">KRA Teacher Certification</p>
+  <h1 class="hero-title">Score entry is not a task.<br>It is part of the <em>process.</em></h1>
+  <p class="hero-sub">Most teachers who feel overwhelmed during their administration window have one thing in common: they saved all their score entry for the end. This section is about a better approach.</p>
+</section>
+
+<!-- SLIDE 2: THE CHALLENGE -->
+<section class="slide slide-challenge" id="slide-1">
+  <p class="section-label">The Reality</p>
+  <h2 class="slide-title">Fitting it all into a busy school day</h2>
+  <div class="two-col">
+    <div>
+      <p class="body-text">The KRA includes many items. Teachers often begin administering it while still establishing classroom routines and getting to know their students.</p>
+      <p class="body-text" style="margin-top:16px;">In practice, the teachers who feel most on top of their window are not the ones who work harder. They are the ones who build entry into their week, a little at a time, rather than saving it for the end.</p>
+    </div>
+    <div>
+      <div class="stat-block">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Different workflow approaches work well.<br>None of them involve saving entry for the last week.</div>
+      </div>
+      <div class="stat-block" style="margin-top:16px;">
+        <div class="stat-number">1×</div>
+        <div class="stat-label">Per week, check one report. That is all it takes to stay on track.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: ITEM TO DO LIST -->
+<section class="slide slide-tool" id="slide-2">
+  <p class="section-label">Your Weekly Checkpoint</p>
+  <h2 class="slide-title">The Item To Do List</h2>
+  <p class="body-text" style="max-width:640px;">Before you meet the teachers, you need to know about this report. It is the fastest way to see exactly where you are across your entire class without searching through individual student records.</p>
+
+  <div class="tool-card">
+    <div class="tool-card-header">
+      <h2>Item To Do List</h2>
+      <span class="tool-badge">In KReady</span>
+    </div>
+    <div class="tool-card-body">
+      <div class="tool-image-zone">
+        <img
+          src="https://media.thoughtindustries.com/course-uploads/60d0952e-0beb-434b-ab24-b87a8af124e2/xhlngdr611ej-KRAItemToDoList.png"
+          alt="Screenshot of the KRA Item To Do List report showing items that still need scores for each student"
+        >
+      </div>
+      <div class="tool-uses">
+        <h3>How teachers use it</h3>
+        <div class="use-item">
+          <div class="use-dot"></div>
+          <div class="use-text">
+            <strong>Check progress</strong>
+            <span>See which items have scores and which still need attention across your class.</span>
+          </div>
+        </div>
+        <div class="use-item">
+          <div class="use-dot"></div>
+          <div class="use-text">
+            <strong>Identify gaps</strong>
+            <span>Notice which students still need certain items administered.</span>
+          </div>
+        </div>
+        <div class="use-item">
+          <div class="use-dot"></div>
+          <div class="use-text">
+            <strong>Plan next week</strong>
+            <span>Decide which items and students to focus on before the week begins.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: KEY IDEA -->
+<section class="slide slide-callout" id="slide-3">
+  <div class="callout-inner">
+    <p class="section-label" style="color:var(--teal-mid);">The Key Idea</p>
+    <p class="callout-quote">Check the Item To Do List at the end of every week. It shows you exactly what still needs attention <em>before</em> you lose track of it.</p>
+    <p class="callout-action">One report. Five minutes on Friday. That is the habit that keeps teachers ahead of their window instead of scrambling at the end of it.</p>
+  </div>
+</section>
+
+<!-- SLIDE 5: MEET THE TEACHERS -->
+<section class="slide slide-next" id="slide-4">
+  <p class="section-label">Coming Up</p>
+  <h2 class="slide-title">Three teachers. Three approaches.<br>The same goal.</h2>
+  <p class="body-text" style="max-width:600px;">Each of these teachers has a different classroom setup and a different way of working. As you explore their examples, notice what they have in common: assessment happens across the week, not all at once.</p>
+
+  <div class="teacher-grid">
+    <div class="teacher-card">
+      <img src="https://media.thoughtindustries.com/course-uploads/60d0952e-0beb-434b-ab24-b87a8af124e2/b21xfurafdwy-Teacher1.png" alt="Mrs. Carter's classroom">
+      <div class="teacher-card-info">
+        <div class="teacher-name">Mrs. Carter</div>
+        <div class="teacher-approach">Enters scores daily as she observes and administers.</div>
+        <span class="teacher-tag">A little each day</span>
+      </div>
+    </div>
+    <div class="teacher-card">
+      <img src="https://media.thoughtindustries.com/course-uploads/60d0952e-0beb-434b-ab24-b87a8af124e2/3nkt9v5p4w5y-Teacher3.png" alt="Mr. Grant's classroom">
+      <div class="teacher-card-info">
+        <div class="teacher-name">Mr. Grant</div>
+        <div class="teacher-approach">Records on paper during the week, enters during planning time.</div>
+        <span class="teacher-tag">Paper first</span>
+      </div>
+    </div>
+    <div class="teacher-card">
+      <img src="https://media.thoughtindustries.com/course-uploads/60d0952e-0beb-434b-ab24-b87a8af124e2/rmeja123itvt-Teacher2.png" alt="Ms. Nguyen's classroom">
+      <div class="teacher-card-info">
+        <div class="teacher-name">Ms. Nguyen</div>
+        <div class="teacher-approach">Papers all week, scans everything on Friday in one checkpoint.</div>
+        <span class="teacher-tag">Weekly scan</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const progress = document.getElementById('progress');
+
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = pct + '%';
+  }
+
+  function updateDots() {
+    let current = 0;
+    slides.forEach((slide, i) => {
+      const rect = slide.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.5) current = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function revealSlides() {
+    slides.forEach(slide => {
+      const rect = slide.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.88) {
+        slide.classList.add('visible');
+      }
+    });
+  }
+
+  function scrollToSlide(index) {
+    slides[index].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    updateDots();
+    revealSlides();
+  });
+
+  // Initial reveal
+  revealSlides();
+  slides[0].classList.add('visible');
+</script>
+</body>
+</html>
